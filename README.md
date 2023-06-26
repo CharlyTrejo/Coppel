@@ -27,9 +27,10 @@ Para ello se obtiene un dataset con aproximadamente 10,000 usuarios de tarjetas 
 * Avg_Open_To_Buy: Diferencia entre límite de crédito asignado y el balance actual en la cuenta.
 * Total_Trans_Amt: Suma de transacciones en el último año
 * Total_Revolving_Bal: Saldo vencido
-* Months_Inactive_12_mon: Número de meses de inactividad en el último año
-* Contacts_Count_12_mon : Número de contactos en el último año
+* Months_Inactive_12_mon: Número de meses de inactividad en los últimos 12 meses
+* Contacts_Count_12_mon : Número de contactos en los últimos 12 meses
 * Total_Ct_Chng_Q4_Q1: Diferencia de transacciones (Q4 sobre Q1)
+* Total_Trans_Ct: Conteo de transacciones totales en los últimos 12 meses
 
 
 **El procedimiento se encuentra disponible en: [Credit_Card_ChurnCustomers.ipynb](https://github.com/CharlyTrejo/Coppel/blob/main/CreditCard_ChurnCustomers.ipynb)** 
