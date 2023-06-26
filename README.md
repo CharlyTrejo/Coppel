@@ -1,4 +1,4 @@
-![HenryLogo](https://d31uz8lwfmyn8g.cloudfront.net/Assets/logo-henry-white-lg.png)
+![Coppel_logo](https://github.com/CharlyTrejo/Coppel/blob/main/assets/coppel_logo.png)
 
 # **Machine Learning**
 
