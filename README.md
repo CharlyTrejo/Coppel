@@ -1,45 +1,81 @@
 ![Coppel_logo](https://github.com/CharlyTrejo/Coppel/blob/main/assets/coppel_logo.png)
 
-# **Machine Learning**
+# **Simulación de Casos con Machine Learning para CENIC (Centro de Investigación Coppel) **
 
 ## **Introducción**
+En el presente repositorio se presentan soluciones de Machine Learning para posibles casos de negocio pertenecientes al sector de Grupo Coppel: BanCoppel, Afore Coppel y Tiendas Coppel. 
 
-  
-<img src="https://github.com/CharlyTrejo/Coppel/blob/main/assets/coppel_logo.png"   
-width="800px" height="400px">
+---
+## **BanCoppel** - `Clientes que cancelan tarjetas de Crédito`
+### `Contexto`
+Los directivos de BanCoppel están preocupados porque cada vez más clientes cancelan sus servicios de tarjeta de crédito. 
+Desearían una herramienta capaz de predecir qué cliente está próximo a cancelar su tarjeta de crédito y así de forma proactiva ofrecer al cliente mejores servicios aumentando la posibilidad de que el cliente decida no cancelar su tarjeta de crédito.
+### `Obtención de datos`
+Para ello se obtiene un dataset con aproximadamente 10,000 usuarios de tarjetas de crédito BanCoppel con los siguientes atributos del cliente:
+* CLIENTNUM: Número de cliente
+* Attrition_Flag: Estatus (Vigente o abandono de servicios)
+* Customer_Age: Edad en años
+* Gender: Género 
+* Dependent_count: Número de dependientes económicos
+* Education_level: Nivel educativo
+* Marital_Status: Estado civil
+* Income_Category: Nivel de ingresos
+* Card_Category: Tipo de tarjeta de Crédito (Producto)
+* Credit_Limit : Límite de crédito
+* Avg_Open_To_Buy: Diferencia entre límite de crédito asignado y el balance actual en la cuenta.
+* Total_Trans_Amt: Suma de transacciones en el último año
+* Total_Revolving_Bal: Saldo vencido
+* Months_Inactive_12_mon: Número de meses de inactividad en el último año
+* Contacts_Count_12_mon : Número de contactos en el último año
+* Total_Ct_Chng_Q4_Q1: Diferencia de transacciones (Q4 sobre Q1)
 
 
-En el transcurso de este módulo haremos un recorrido por cada una de las temáticas esenciales de Machine Learning (en adelante, "ML"). Veremos cuál es su alcance, características, metodología, aplicabilidad y casos de uso. 
-Abordaremos, a su vez, los elementos centrales de campos como `series de tiempo`, `procesamiento de lenguaje natural` y `sistemas de recomendación`.
+**El procedimiento se encuentra disponible en: [Credit_Card_ChurnCustomers.ipynb](https://github.com/CharlyTrejo/Coppel/blob/main/CreditCard_ChurnCustomers.ipynb)** 
 
-Finalmente, en la última clase repasaremos algunas nociones de `Deep Learning`.
+### `Exploración y Análiside Datos`
+El dataset cuenta con 10,127 registros, de los cuales no hay datos nulos, ni duplicados. 
+
+De los 10,127 registros 8,500 pertenecen a clientes activos, mientras que sólo 1,627 son de clientes que han cancelado su tarjeta de crédito, representando el 16.06% de los datos por lo que nos enfrentamos a un dataset con desbalanceo de categorías. 
+
+Mediante un gráfico de correlación se evidencian las variables explicación con mayor asociación (positiva y negativa) con la variable objetivo. 
+#### Top 2 variables con fuerte asociación positiva: 
+1. Contacts_Count_12_mon
+2. Months_Inactive_12_mon
+#### Top 3 variables con fuerte asociación negativa:
+1. Total_Trans_Ct
+2. Total_Ct_Chng_Q4_Q1
+3. Total Revolving_Bal
+
+### `Transformación de Datos`
+Dato que las columnas "Naive_bayes" no aportan datos relevantes, así como el número de cliente es un dato de entrada irrelevante para un modelo de Machine Learning fueron eliminadas del dataframe.
+
+El dataframe presenta importantes outliers en los atributos Credit_Limit, Avg_Opent_to_Buy y Total_Trans_Amt, dado que el número de registros es relativamente reducido reemplazaré sus datos atípicos con los valores dentro de los límites superiores máximos.
+
+Transformo la variable objetivo con '0' para evento no exitoso (cliente activo) y '1' para evento exitoso (cliente cancela su tarjeta de crédito). 
+
+Realizo una conversión de variables categóricas a varibles dummies mediante método de pandas get_dummies(). 
+
+Además realicé una técnica de escalado a los datos utilizando la clase StandardScale() de scikit-learn. para asegurarme de que las variables tengan una escala similar y estén centradas alrededor de cero; justificado en que los algoritmos  de descenso de gradiente son sensibles a las diferencias en escala.
+
+### `Elección de Modelo`
+Elegí trabajar con un Extreme Gradient Boosting (XGBoost) dado su rendimiento, optimización eficiente, manejo de datasets con alta dimensionalidad, flexibilidad en tipos de datos (categóricos y numéricos), es altamente escalable en caso de que sea requerido por la naturalidad del negocio y también por el tema de desbalanceo de datos , ya que XGBoost tiene técnicas incorporadas para manejar problemas de desequilibrio de clases en conjuntos de datos desbalanceados. 
+
+El XGBoost es un algoritmo "Gradient Boosting" basado en árboles de decisión; la idea detrás del Gradient Boosting es entrenar modelos de manera secuencial donde cada modelo se construye para corregir los errores cometidos por el modelo anterior. Es decir, se enfoca en aprender de los errores y mejorar iterativamente el rendimiento del modelo. 
+ 
+### `Performance del Modelo`
+--- 
+ `Deep Learning`.
 
 Como podemos observar en la imagen supra, ML se inserta en una disciplina más general, macro, conocida como **Inteligencia Artificial**. Para profundizar un poco en estos conceptos, recomendamos acceder al video que se deja a continuación.
 
 
-[AI, ML & DL](https://www.youtube.com/watch?v=6iVUKYgOihQ&ab_channel=AprendeIAconLigdiGonzalez)
 
-La pregunta clave que buscaremos responder en esta sección es: ¿cómo hacemos para que las computadores aprendan de los datos?
 
-Para ello, debemos comenzar hablando de modelos matemáticos y cómo estos se relacionan con ML.
 
-Los modelos matemáticos son descripciones de un sistema que usa conceptos y lenguaje matemático, que pueden ayudar a estudiar los efectos de diferentes componentes y hacer predicciones relacionadas a este comportamiento. Este proceso de agrupar información en una herramienta para explicar y predecir se llama ***modelado*** y se estructura alrededor de una idea: por qué ciertos eventos acontecieron, acontecen y acontecerán. 
-En esta línea, una primera aproximación a un modelado podría armarse con las observaciones y los patrones que se desprenden de eventos pasados, ya que podríamos aseverar que en el futuro podrían repetirse esos componentes y eventos.
 
 ## *Ejemplo clásico*
 
-Para avanzar con los contenidos de ML, nos detendremos ahora en un ejemplo que demuestre su funcionalidad.
-Para este claso, empleamos un ejemplo de Correo Spam.
 
-<img src= "https://miro.medium.com/max/1400/1*WA9aceQugVlBS81r2a7Snw.png" height="300">
-
-
-Habitualmente, recibimos correos en nuestra casilla. Algunos tendrán un contenido que es de nuestro interés, pero otros serán correos no deseados. Ahora bien, ¿cómo hace el sistema para distinguir un correo spam de otro que no lo es? En definitiva, ¿cómo lo detecta?
-En efecto, con un modelo de Machine Learning. El algoritmo clasificador, en este caso, separa los correos deseados de aquellos que detecta como spam.
-
-<img src="..\_src\assets\spam.jpg" height="300">
-
-Para nosotros sería bastante fácil poder detectar un correo spam. Pero para la máquina esto requiere de un nivel de abstracción bastante amplio. Debe entender el texto, relacionar las palabras, buscar patrones, etc. Además, debe buscar palabras clave. A priori, ya sabemos que si en un correo tenemos las palabras "príncipe", "cuenta bancaria" o "herencia" probablemente estemos frente a un correo spam.
 
 - - - 
 
@@ -119,31 +155,7 @@ width="1000px" height="400px">
 
 - [Roca, Genís: “La sociedad digital”, TedxTalks](https://www.youtube.com/watch?v=kMXZbDT5vm0)
 
-Resolver problemas diversos de forma automática y simulando el comportamiento humano es una idea que existe desde la antigüedad. Sin embargo, no ha sido hasta mediados del siglo pasado que el avance de las ciencias de la computación permitió plantearse la posibilidad de que las computadoras pudieran dar soluciones “inteligentes” a esos problemas.
 
-### Historia y evolución de la Inteligencia Artificial
-
-* En la Grecia antigua, Aristóteles (384-322 a.C.) fue el
-primero en describir una parte del funcionamiento de la mente humana en un conjunto de reglas para obtener conclusiones racionales. Ctesibio de Alejandría (250 a.C.) construyó la primera máquina autocontrolada, un regulador del flujo de agua, racional pero sin razonamiento.
-<img src="../_src/assets/primera_maquina_autocontrolada.jpg"  height="200">
-
-* En su obra Ars Magna (1274), Raimundo Lulio inventó un lenguaje formal basado en la lógica combinatoria para poder hablar de todo aquello relevante a la filosofía y la religión sin la barrera de las lenguas. Es el primer intento de crear una lengua universal e influenció a Leibniz, quien expandió el sistema lo denominó combinatoria.
-
-* En su trabajo "El arte de la combinatoria", escrito en 1666, Leibniz justificó la importancia del simbolismo racional para la lógica y para las conclusiones heurísticas; Argumentó que el conocimiento se reduce a pruebas de afirmaciones, pero para encontrar pruebas es necesario mediante un cierto método.
-
-* En 1854 George Boole publicó “Una investigación sobre las leyes del pensamiento”, donde desarrolló un sistema de reglas que le permitían expresar, manipular y simplificar problemas lógicos y filosóficos cuyos argumentos admiten los estados verdadero o falso por procedimientos matemáticos.
-
-* En 1936, Alan Mathison Turing ideó un modelo formal de computador extremadamente sencillo, la Máquina de Turing, con el que es posible realizar cualquier cómputo que un computador digital sea capaz de realizar. Es el primer modelo teórico de un procesador.
-
-<img src="../_src/assets/automata_finito.jpg"  height="200">
-
-* En 1943, Warren McCulloch y Walter Pitts presentaron su modelo de neuronas artificiales,
-el cual se considera el primer trabajo del campo,
-aún cuando todavía no existía el término.
-
-* En 1949, Donald Hebb fundamenta que la mayoría de las funciones de aprendizaje que pueden hallarse en una red neuronal. Su idea fue que el aprendizaje ocurría cuando ciertos cambios en una neurona eran activados.
-
-* En 1950, Alan Turing crea la Prueba de Turing, que consiste en que si una persona, en una conversación con una máquina, no es capaz de distinguirlo de un humano, esta es aprobada como inteligente.
 
 <img src="../_src/assets/test_Turing.jpg"  height="200">
 
@@ -196,48 +208,7 @@ Esto generó un gran cambió al campo del aprendizaje automático de las computa
 
 * Las redes neuronales son como una caja negra. Esto quiere decir que cuando la máquina da una solución a un problema, es muy complicado conocer cuáles son sus “razonamientos” para llegar a dicha solución.
 
-### Presente y Futuro de la IA
 
-Inicialmente había dos obstáculos:
-
-* La capacidad de cómputo: Superado por medio de
-la escalabilidad vertical, haciendo las computadoras más potentes siguiendo la Ley de Moore.
-
-* Los datos: Superado por medio de la escalabilidad horizontal, haciendo que varios ordenadores computen como uno solo, por medio de tecnologías como Big Data.
-
-<img src="../_src/assets/ley_moore.jpg"  height="250">
-
-### Primeros algoritmos de Machine Learning
-
-* Sistemas Expertos:
-El experto humano ingresa cada experiencia con su regla de resolución. Esto se traduce en una base de conocimientos con reglas de inferencia que permite luego, a un usuario no experto, ante la misma problemática (misma experiencia) encontrar una regla de resolución adecuada.
-<img src="../_src/assets/sistema_experto.jpg"  height="250">
-
-* Árbol de Decisión:
-Cada nodo puede ser una pregunta a los datos, o una resolución.
-
-<img src="../_src/assets/arbol_decision.jpg"  height="250">
-
-* Vecinos más cercanos ó K-Vecinos:
-Una nueva instancia de categoriza según sea la categoría de los k vecinos más cercanos
-
-<img src="../_src/assets/k-vecinos.jpg"  height="250">
-
-* Perceptrón simple:
-Basado en el modelo de redes neuronales artificiales, consta de n entradas X, que se ponderan con su respectivo valor W, se sumarizan y, por último, esta salida pasa por una función de activación para dar un resultado final.
-
-<img src="../_src/assets/perceptron_simple.jpg"  height="250">
-
-## Flujo de Trabajo
-
-1) Definición: Se definen las preguntas que queremos responder. ¿Qué datos necesitamos para responder esas preguntas?
-
-2) Investigación: Se obtienen los datos, se “limpian” y se procede a explorarlos.
-
-3) Análisis: Los datos obtenidos se analizan con modelos (estadísticos, Machine Learning, etc.). Interpretamos los resultados y transformamos datos en información.
-
-4) Presentación: Presentamos los resultados obtenidos y las conclusiones a las que llegamos. La información se transforma en Conocimiento. Puesta
-en producción.
 
 ### Exploración de los datos
 
@@ -248,127 +219,10 @@ Los datos con los que vamos a estar trabajando, son en definitiva la fuente del 
 * Distribución.
 * Rangos.
 
-### Falencias en los datos
 
-Como primera medida, antes de comenzar a realizar las tareas de análisis, vamos a encontrarnos con ciertas cuestiones que hacen a la calidad y fiabilidad del dato, y debemos resolverlas, entre ellas:
 
-* Faltantes: ¿Qué hacer?
-* Rangos de datos numéricos.
-* Normalización.
-* Errores: Su tratamiento.
 
-## Transformacion de Datos
 
-Es el proceso que más tiempo lleva en un flujo de Data Science y resulta muy importante no perder el objetivo de por qué lo hacemos.
-Por un lado, los modelos de Machine Learning que usemos, que van a "aprender" de nuestros datos, sólo entienden de números. Esto quiere decir que, si en un dataset hay una columna de género con dos valores, ‘femenino’ y ‘masculino’, tendremos que llevarlo a una representación que los modelos entiendan. En este caso, asignamos un ‘0’ y un ‘1’ a cada uno de los valores y problema resuelto.
-En el fondo, hay una hipótesis implícita: el género es un campo muy útil para hacer la tarea de predicción o clasificación que requerimos, por lo que queremos mantener esta información y hacerla comprensible para nuestros modelos. La pregunta que queremos responder nos va a indicar cómo tenemos que trabajar con nuestro dataset.
-
-### Tratamiento sobre Variables Cualitativas Ordinales
-
-Sus posibles valores son categorías pero sí hay una relación de orden. A pesar de que pueden ser números, ¡no se deben sumar!
-
-Ejemplos:
-* Tamaño de una prenda de ropa: XS, S, M, L, XL
-* Tipo de Nafta por octanaje: 95, 98, más de 98
-* Rangos etarios: bebé, niño/a, adolescente, adulto/a, anciano/a
-
-Podemos hacer una asignación a número enteros manteniendo el orden:<br>
-S→0<br>
-M→1<br>
-L→2<br>
-
-Este es uno de los tipos de encoding más comunes que vamos a tener que hacer.
-En el ejemplo, queremos llevar al género, los valores male y female, a 0 y 1. Lo importante es no perder cuál es cuál. Esto, en Pandas, lo podemos hacer con la función map(). Este tipo de encoding se denomina Label_enconding.
-
-<img src="../_src/assets/label_encoding.jpg"  height="200">
-
-### Tratamiento sobre Variables Cualitativas Nominales
-
-Sus posibles valores pertenecen a una o varias categorías. Las categorías no siguen una relación de orden. Ninguna es mayor o menor que otra.
-
-Ejemplos:
-* Nacionalidad
-* Tipo de Vino
-* Especies de flores
-* Color de auto
-
-Se llevan a variables dummies con One-Hot Encoding. La variable dummie será entonces aquella que tome valores 0 o 1, en función de la presencia o no de un atributo.
-Puede hacer que nuestro dataset crezca mucho.
-
-<img src="../_src/assets/one-hot-enconding.jpg"  height="200">
-
-Una variable dummy toma como valor 0 o 1 para indicar la presencia o ausencia de algún atributo categórico.
-La función  get_dummies() hace automáticamente esto en un dataframe sobre las columnas indicadas.
-
-<img src="../_src/assets/one-hot-encoding.jpg"  height="200">
-
-### Tratamiento sobre Variables Cuantitativas
-
-Son aquellas variables que se miden o se cuentan. Pueden ser discretas o continuas.
-Hay una relación de orden entre ellas. Se puede aplicar funciones de agregación.
-
-Ejemplos:
-* Edad, Altura y Peso.
-* Puntaje, precio de un vino.
-* Valor de un pasaje.
-
-En general, ya vienen en un formato “cómodo” para trabajar, pero a veces queremos agruparlas según grupos o rangos, por ej.: agrupar edades en rangos (bebés, niños, adolescentes, adultos, ancianos), esto se denomina Discretización y Binning.
-
-### Variables Numéricas
-
-En general, las variables numéricas podrían ser usadas sin demasiado preprocesamiento, ya que ya están en un formato que los modelos entienden. Sin embargo, muchas veces no es ese el caso.
-
-Discretización y binning:
-La función cut() transforma la columna Age en rangos (bins) convirtiendo así el dato de edad en una variable discreta.
-
-<img src="../_src/assets/discretizacion_binning.jpg"  height="200">
-
-Reescalar es útil sobre todo cuando queremos llevar los datos a una distribución de probabilidad con la que podamos trabajar mejor, como en el caso que vimos de llevar el dato a su logaritmo base 10.
-
-## Scikit-Learn
-
-Scikit-Learn es la librería base para Machine Learning en Python.
-
-Se puede usar para 
-* Procesamiento de los datos
-* Modelos de Clasificación y Regresión
-* Métricas de Evaluación de algoritmos
-
-Adecuado para seguir un Pipeline: Es un objeto en el que es posible encapsular todo el proceso de los datos.
-
-- [Documentación] (https://scikit-learn.org/stable/index.html)
-
-<img src="../_src/assets/scikit-learn.jpg" height="400">
-
-Vamos a encontrar que Scikit-Learn trabaja con Clases e implementa de manera uniforme los atributos y métodos de sus objetos:
-
-* Estimadores: Todos tienen el método fit()
-* Predictores: Todos tienen el método predict()
-* Transformadores: Todos tienen el método transform()
-* Modelos: Todos tienen el método score()
-
-En general, los pasos a seguir con una biblioteca de Scikit-Learn serán:
-
-1) Crear el objeto con los parámetros correspondientes.
-objeto = Clase(parametros)
-
-2) Implementar el método fit() que aprende de los datos.
-objeto.fit(Datos)
-
-3) Implementar el método transform() que transforma los datos.
-objeto.transform(Datos)
-
-Las siguientes clases son las herramientas disponibles para procesar datos:
-
-* SimpleImputer: Rellena valores faltantes.<br>
-<img src="../_src/assets/simpleImputer.jpg" height="200">
-* OneHotEncoder: Pasa de variables categóricas a dummies. Notar que con N instancias, son necesarias solo N-1 nuevas columnas.<br>
-<img src="../_src/assets/one_hot_1.jpg" height="200">
-<img src="../_src/assets/one_hot_2.jpg" height="200">
-* LabelEncoder: Pasa variables categóricas a valores numéricos.<br>
-* KBinsDiscretizer: Para discretización y binning, la principal diferencia con Pandas es que Scikit-Learn decide los límites de los bines de acuerdo a una estrategia que le pasemos de parámetro.<br>
-* SelectKBest: Selecciona atributos del dataset en base a diferentes criterios de evaluación. Puede servir como respaldo o referencia del análisis que se está realizando sobre los datos.<br>
-<img src="../_src/assets/label_encoder2.jpg" height="200">
 
 ### Reescalar los datos
 
@@ -390,26 +244,5 @@ En 1 originalmente, A estaba más cerca de B, al multiplicar por 100, quedó má
 A cada dato se le resta la media de la variable y se le divide por la desviación típica:<br>
 <img src="../_src/assets/standard_scaler_formula.jpg" height="50">
 
-Si bien puede resultar conveniente en datos que no tienen distribución de probabilidad Gaussiana o Normal debido a que se puede trabajar mejor bajo ese esquema, tanto la media como la desviación típica son muy sensibles a outliers.<br>
+Si bien puede resultar conveniente en datos que no tienen distribución de probabilidad Gaussiana o Normal debido a que se puede trabajar mejor bajo ese esquema, tanto la media como la desviación típica son muy sensibles a outliers.
 
-<img src="../_src/assets/standard_scaler.jpg" height="300">
-
-## `Práctica`
-
-La estructura de este módulo, para cada una de sus clases, se compone de la siguiente manera:
-
-1. Clase teórica
-
-2. Clase práctica
-
-La primera parte se aborda en los respectivos README. La segunda parte, a través de notebooks donde realizamos prácticas guiadas para bajar a tierra algunos de los conceptos vistos en la teoría.
-
-La práctica de hoy se divide en dos:
-
-+ Práctica_01: regresión lineal
-
-+ Práctica_02: regresión logística
-
-## `Homework`
-
-+ Práctica_Adicional_Regresión.ipynb
