@@ -7,6 +7,7 @@ En el presente repositorio se presentan soluciones de Machine Learning para posi
 
 ---
 ## **BanCoppel** - `Clientes que cancelan tarjetas de Crédito`
+![credito_bancoppel](https://github.com/CharlyTrejo/Coppel/blob/main/assets/credito_bancoppel.png)
 ### `Contexto`
 Los directivos de BanCoppel están preocupados porque cada vez más clientes cancelan sus servicios de tarjeta de crédito. 
 Desearían una herramienta capaz de predecir qué cliente está próximo a cancelar su tarjeta de crédito y así de forma proactiva ofrecer al cliente mejores servicios aumentando la posibilidad de que el cliente decida no cancelar su tarjeta de crédito.
@@ -58,7 +59,7 @@ Realizo una conversión de variables categóricas a varibles dummies mediante m�
 Además realicé una técnica de escalado a los datos utilizando la clase StandardScale() de scikit-learn. para asegurarme de que las variables tengan una escala similar y estén centradas alrededor de cero; justificado en que los algoritmos  de descenso de gradiente son sensibles a las diferencias en escala.
 
 ### `Elección de Modelo`
-Elegí trabajar con un Extreme Gradient Boosting (XGBoost) dado su rendimiento, optimización eficiente, manejo de datasets con alta dimensionalidad, flexibilidad en tipos de datos (categóricos y numéricos), es altamente escalable en caso de que sea requerido por la naturalidad del negocio y también por el tema de desbalanceo de datos , ya que XGBoost tiene técnicas incorporadas para manejar problemas de desequilibrio de clases en conjuntos de datos desbalanceados. 
+Elegí trabajar con un modelo Extreme Gradient Boosting (XGBoost) dado su rendimiento, optimización eficiente, manejo de datasets con alta dimensionalidad, flexibilidad en tipos de datos (categóricos y numéricos), es altamente escalable en caso de que sea requerido por la naturalidad del negocio y también por el tema de desbalanceo de datos, ya que XGBoost tiene técnicas incorporadas para manejar problemas de desequilibrio de clases en conjuntos de datos desbalanceados. 
 
 El XGBoost es un algoritmo "Gradient Boosting" basado en árboles de decisión; la idea detrás del Gradient Boosting es entrenar modelos de manera secuencial donde cada modelo se construye para corregir los errores cometidos por el modelo anterior. Es decir, se enfoca en aprender de los errores y mejorar iterativamente el rendimiento del modelo. 
 
